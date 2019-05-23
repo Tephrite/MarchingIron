@@ -1,8 +1,9 @@
 - Main Menu
 	- Play Button
 	- Exit Button
+
 - City sprite
-	- HP
+	- 1 HP
 	- Image
 	- Collision detection
 
@@ -26,7 +27,7 @@
 	- Selecting Units
 	- Moving Unit
 
-UI
+- UI
 	- City HP
 	- Village HPs
 	- Round Number

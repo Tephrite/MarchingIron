@@ -7,7 +7,7 @@ var gamePlayState = new Phaser.Class({
     },
   
     preload: function() {
-        this.load.image('bg', 'Assets/Pictures/basicMap.png');
+        this.load.image('bg', 'Assets/Pictures/Map_1.png');
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
     },
 
