@@ -10,14 +10,12 @@ var gamePlayState = new Phaser.Class({
         xDest: null,
         yDest: null,
         
-        healthPoints = 5;
     },
     
     player:{
         xDest: null,
         yDest: null,
         
-        healthPoints = 1;
     },
     
   
@@ -44,21 +42,23 @@ var gamePlayState = new Phaser.Class({
         
         this.add.image(640, 400, 'bg');
         
+        
+        
+        //sprites
+        this.city = this.physics.add.sprite(650, 400, 'city').setDisplaySize(300, 300).setSize(100, 100).setOffset(20,40);
+        self.city.body.immovable = true;
+        
+        self.player = this.add.sprite(300, 200, 'friendly');
+        this.physics.add.existing(self.player, false);
+        
+        game.input.activePointer.capture = true;
+        
         //UI
         this.add.image(640, 400, 'ui');
         cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         vHP2 = this.add.text(960, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         round = this.add.text(1200, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
-        
-        //sprites
-        this.city = this.physics.add.sprite(650, 400, 'city').setDisplaySize(300, 300).setSize(100, 100).setOffset(20,40);
-        self.city.body.immovable = true;
-        
-        self.player = this.add.sprite(300, 200, 'friendly')
-        this.physics.add.existing(self.player, false);
-        
-        game.input.activePointer.capture = true;
         
         
     },
