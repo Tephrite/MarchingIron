@@ -15,12 +15,15 @@ var mainMenuState = new Phaser.Class({
 
     create: function() {
         console.log("MainMenu");
-        this.add.image(640, 400, 'bg');
+        let background = this.add.image(640, 400, 'bg');
         
         let playButton = this.add.image(640, 300, 'playButton');
         playButton.setInteractive();
         playButton.on('pointerdown', function(pointer){ 
             game.scene.start('GamePlay');
+            
+            background.visible = false;
+            
             playButton.x = 2000;
             playButton.y = 2000;
             
