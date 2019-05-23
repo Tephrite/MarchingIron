@@ -1,0 +1,34 @@
+- Main Menu
+	- Play Button
+	- Exit Butotn
+- City sprite
+	- HP
+	- Image
+	- Collision detection
+
+- Village sprite
+	- HP
+	- Image
+	- Collision detection
+
+- Enemy
+	- HP
+	- Image
+	- Collision detection
+	- Spawn point
+	- HP * 3 on round end
+
+- Player
+	- HP
+	- Image
+	- Collision detection
+	- Spawn points
+	- Selecting Units
+	- Moving Unit
+
+UI
+	- City HP
+	- Village HPs
+	- Round Number
+	- Time survived
+	
