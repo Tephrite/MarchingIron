@@ -19,24 +19,15 @@ var mainMenuState = new Phaser.Class({
         
         let playButton = this.add.image(640, 300, 'playButton');
         playButton.setInteractive();
-        playButton.on('pointerdown', function(pointer){ 
+        playButton.once('pointerdown', function(pointer){ 
             game.scene.start('GamePlay');
-            
-            background.visible = false;
-            
-            playButton.x = 2000;
-            playButton.y = 2000;
-            
-            exitButton.x = 2000;
-            exitButton.y = 2000;
-            
             music.stop();
             
             });
         
         let exitButton = this.add.image(640, 500, 'exitButton');
         exitButton.setInteractive();
-        exitButton.on('pointerdown', function(pointer){ window.close();});
+        exitButton.once('pointerdown', function(pointer){ window.close();});
         
         var music= this.sound.add('MenuMusic');
         music.play();
