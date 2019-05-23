@@ -7,12 +7,17 @@ var gamePlayState = new Phaser.Class({
     },
     
     city:{
+        xDest: null,
+        yDest: null,
         
+        healthPoints = 5;
     },
     
     player:{
         xDest: null,
-        yDest: null
+        yDest: null,
+        
+        healthPoints = 1;
     },
     
   
@@ -47,10 +52,11 @@ var gamePlayState = new Phaser.Class({
         round = this.add.text(1200, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         
         //sprites
-        this.city = this.add.sprite(650, 400, 'city').setDisplaySize(300, 300);
+        this.city = this.physics.add.sprite(650, 400, 'city').setDisplaySize(300, 300).setSize(100, 100).setOffset(20,40);
+        self.city.body.immovable = true;
         
         self.player = this.add.sprite(300, 200, 'friendly')
-        this.physics.add.existing(self.player);
+        this.physics.add.existing(self.player, false);
         
         game.input.activePointer.capture = true;
         
@@ -65,25 +71,37 @@ var gamePlayState = new Phaser.Class({
             console.log("x: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
             self.player.yDest = game.input.activePointer.y;
         }
+        
+        this.physics.add.collider(self.player, self.city, function(){ self.stopPlayer();});
+        
         self.movePlayer(game.input.activePointer.x, game.input.activePointer.y);
+        
+        
     },
 
     movePlayer: function() {
         var self = this;
-        if (Math.floor(self.player.x ) == Math.floor(self.player.xDest)){
-            self.player.body.velocity.x = 80;
+        if (Math.floor(self.player.x / 10) == Math.floor(self.player.xDest)){
+            self.player.body.velocity.x = 0;
         } else if (Math.floor(self.player.x) < Math.floor(self.player.xDest)){
             self.player.body.velocity.x = 80;
         } else if (Math.floor(self.player.x) > Math.floor(self.player.xDest)){
             self.player.body.velocity.x = -80;
     }
-        if (Math.floor(self.player.y ) == Math.floor(self.player.yDest)){
-            self.player.body.velocity.y = 80;
+        if (Math.floor(self.player.y / 10) == Math.floor(self.player.yDest)){
+            self.player.body.velocity.y = 0;
         } else if (Math.floor(self.player.y) < Math.floor(self.player.yDest)){
             self.player.body.velocity.y = 80;
         } else if (Math.floor(self.player.y) > Math.floor(self.player.yDest)){
             self.player.body.velocity.y = -80;
         }
+    },
+    
+    stopPlayer: function(){
+        var self = this;
+        self.player.xDest = self.player.x;
+        self.player.yDest = self.player.y;
+        self.player.body.velocity.x = self.player.body.velocity.y = 0;
     }
 });
 
