@@ -15,6 +15,7 @@ var preloadState = new Phaser.Class({
     update: function() {
         // Update objects & variables
     }
+    
 });
 
 // Add scene to list of scenes

@@ -25,6 +25,10 @@
         type: Phaser.AUTO,
         width: 1280,
         height: 800,
+        physics: {
+            default: 'arcade',
+            arcade: { debug: true }
+        },
         scene: myGame.scenes
       };
     
