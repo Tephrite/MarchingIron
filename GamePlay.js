@@ -7,12 +7,17 @@ var gamePlayState = new Phaser.Class({
     },
   
     preload: function() {
-        // Preload images for this state
+        this.load.image('bg', 'Assets/Pictures/basicMap.png');
+        this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
     },
 
     create: function() {
         // Create objects
         console.log("GamePlay");
+        this.add.image(640, 400, 'bg');
+        
+        var music= this.sound.add('bgMusic');
+        music.play();
     },
 
     update: function() {

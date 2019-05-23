@@ -1,6 +1,6 @@
 - Main Menu
 	- Play Button
-	- Exit Butotn
+	- Exit Button
 - City sprite
 	- HP
 	- Image

@@ -10,6 +10,7 @@ var mainMenuState = new Phaser.Class({
         this.load.image('bg', 'Assets/Pictures/Menu.png');
         this.load.image('playButton', 'Assets/Pictures/button_play.png', 193, 71);
         this.load.image('exitButton', 'Assets/Pictures/button_exit.png', 193, 71);
+        this.load.audio('MenuMusic', 'Assets/Music/mm_intro.ogg');
     },
 
     create: function() {
@@ -18,13 +19,26 @@ var mainMenuState = new Phaser.Class({
         
         let playButton = this.add.image(640, 300, 'playButton');
         playButton.setInteractive();
-        playButton.on('pointerdown', function(pointer){ game.scene.load('GamePlay')});
+        playButton.on('pointerdown', function(pointer){ 
+            game.scene.start('GamePlay');
+            playButton.x = 2000;
+            playButton.y = 2000;
+            
+            exitButton.x = 2000;
+            exitButton.y = 2000;
+            
+            music.stop();
+            
+            });
         
         let exitButton = this.add.image(640, 500, 'exitButton');
         exitButton.setInteractive();
         exitButton.on('pointerdown', function(pointer){ window.close();});
         
-        game.scene.start('GamePlay');
+        var music= this.sound.add('MenuMusic');
+        music.play();
+        
+        
     },
 
     update: function() {
