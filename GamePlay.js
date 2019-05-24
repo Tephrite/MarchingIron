@@ -6,13 +6,19 @@ var gamePlayState = new Phaser.Class({
         Phaser.Scene.call(this, {key: 'GamePlay'});
     },
     
-    city:{
+    castle:{
         xDest: null,
         yDest: null,
         
     },
     
-    player:{
+    village:{
+        xDest: null,
+        yDest: null,
+        
+    },
+    
+    friendly:{
         xDest: null,
         yDest: null,
         
@@ -26,7 +32,7 @@ var gamePlayState = new Phaser.Class({
         
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
         
-        this.load.image('city', 'Assets/Pictures/Clickergamecastle.png');
+        this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue.png');
         
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
@@ -42,14 +48,16 @@ var gamePlayState = new Phaser.Class({
         
         this.add.image(640, 400, 'bg');
         
-        
-        
         //sprites
-        this.city = this.physics.add.sprite(650, 400, 'city').setDisplaySize(300, 300).setSize(100, 100).setOffset(20,40);
-        self.city.body.immovable = true;
+        this.castle = this.physics.add.sprite(650, 400, 'castle');
+        self.castle.body.immovable = true;
         
-        self.player = this.add.sprite(300, 200, 'friendly');
-        this.physics.add.existing(self.player, false);
+        self.friendly = new Friendly(300, 200, self);
+        this.add.existing(self.friendly);
+        this.physics.add.existing(self.friendly, false);
+        
+        //self.village = this.add.group();
+        //self.village.a
         
         game.input.activePointer.capture = true;
         
@@ -67,43 +75,63 @@ var gamePlayState = new Phaser.Class({
         // Update objects & variables
         var self = this;
         if (game.input.activePointer.isDown){
-            self.player.xDest = game.input.activePointer.x;
+            self.friendly.xDest = game.input.activePointer.x;
             console.log("x: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
-            self.player.yDest = game.input.activePointer.y;
+            self.friendly.yDest = game.input.activePointer.y;
+            
+            self.friendly.setDest(game.input.activePointer.x, game.input.activePointer.y);
+            
         }
         
-        this.physics.add.collider(self.player, self.city, function(){ self.stopPlayer();});
-        
-        self.movePlayer(game.input.activePointer.x, game.input.activePointer.y);
+        self.friendly.update();
+        this.physics.add.collider(self.friendly, self.castle, function(){ });
         
         
     },
 
-    movePlayer: function() {
-        var self = this;
-        if (Math.floor(self.player.x / 10) == Math.floor(self.player.xDest)){
-            self.player.body.velocity.x = 0;
-        } else if (Math.floor(self.player.x) < Math.floor(self.player.xDest)){
-            self.player.body.velocity.x = 80;
-        } else if (Math.floor(self.player.x) > Math.floor(self.player.xDest)){
-            self.player.body.velocity.x = -80;
-    }
-        if (Math.floor(self.player.y / 10) == Math.floor(self.player.yDest)){
-            self.player.body.velocity.y = 0;
-        } else if (Math.floor(self.player.y) < Math.floor(self.player.yDest)){
-            self.player.body.velocity.y = 80;
-        } else if (Math.floor(self.player.y) > Math.floor(self.player.yDest)){
-            self.player.body.velocity.y = -80;
-        }
-    },
-    
-    stopPlayer: function(){
-        var self = this;
-        self.player.xDest = self.player.x;
-        self.player.yDest = self.player.y;
-        self.player.body.velocity.x = self.player.body.velocity.y = 0;
-    }
 });
+
+function Friendly(x, y, game) {
+  var friendly = game.add.sprite(x, y, 'friendly');
+  friendly.speed = 80
+  friendly.xDest = x;
+  friendly.yDest = y;
+
+  friendly.setDest = function(x, y) {
+    friendly.xDest = x;
+    friendly.yDest = y;
+  };
+
+  friendly.update = function() {
+    var self = this;
+    move(self);
+
+  }
+  friendly.stop = function() {
+    var self = this;
+    self.xDest = self.x;
+    self.yDest = self.y;
+
+  }
+  return friendly;
+}
+
+function move(self){
+  if (Math.floor(self.x / 10) == Math.floor(self.xDest / 10)) {
+    self.body.velocity.x = 0;
+  } else if (Math.floor(self.x) < Math.floor(self.xDest)) {
+    self.body.velocity.x = self.speed;
+  } else if (Math.floor(self.x) > Math.floor(self.xDest)) {
+    self.body.velocity.x = -self.speed;
+  }
+  if (Math.floor(self.y / 10) === Math.floor(self.yDest / 10)) {
+    self.body.velocity.y = 0;
+  } else if (Math.floor(self.y) < Math.floor(self.yDest)) {
+    self.body.velocity.y = self.speed;
+  } else if (Math.floor(self.y) > Math.floor(self.yDest)) {
+    self.body.velocity.y = -self.speed;
+  }
+}
 
 // Add scene to list of scenes
 myGame.scenes.push(gamePlayState);
