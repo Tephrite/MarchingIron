@@ -28,12 +28,15 @@ var gamePlayState = new Phaser.Class({
     preload: function() {
         var time = 'null';
 
-        this.load.image('ui', 'Assets/Pictures/UI.png');
+        this.load.image('ui', 'Assets/Pictures/MapOneHealthBars.png');
         
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
         
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue.png');
+        this.load.image('villageNeutral', 'Assets/Pictures/SettlementOne1.png');
+        this.load.image('villageCaptured', 'Assets/Pictures/SettlementOne2.png');
+        this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
         
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
     },
@@ -49,15 +52,24 @@ var gamePlayState = new Phaser.Class({
         this.add.image(640, 400, 'bg');
         
         //sprites
-        this.castle = this.physics.add.sprite(650, 400, 'castle');
+        this.castle = this.physics.add.sprite(640, 417, 'castle');
         self.castle.body.immovable = true;
         
-        self.friendly = new Friendly(300, 200, self);
+        self.friendly = new Friendly(300, 200, self).setInteractive();
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        //self.village = this.add.group();
-        //self.village.a
+        self.village1 = new Village(258, 615, self);
+        self.village2 = new Village(574, 232, self);
+        self.village3 = new Village(834, 677, self);
+        self.village4 = new Village(970, 225, self);
+        self.village5 = new Village(1024, 455, self);
+        
+        this.physics.add.existing(self.village1, true);
+        this.physics.add.existing(self.village2, true);
+        this.physics.add.existing(self.village3, true);
+        this.physics.add.existing(self.village4, true);
+        this.physics.add.existing(self.village5, true);
         
         game.input.activePointer.capture = true;
         
@@ -75,16 +87,25 @@ var gamePlayState = new Phaser.Class({
         // Update objects & variables
         var self = this;
         if (game.input.activePointer.isDown){
-            self.friendly.xDest = game.input.activePointer.x;
-            console.log("x: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
-            self.friendly.yDest = game.input.activePointer.y;
-            
+            //self.friendly.xDest = game.input.activePointer.x;
+            //self.friendly.yDest = game.input.activePointer.y;
+            console.log("Cursor\nx: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
             self.friendly.setDest(game.input.activePointer.x, game.input.activePointer.y);
             
         }
+        self.friendly.on('pointerdown', function () {
+            self.friendly.isSelected();
+        });
         
         self.friendly.update();
+        
+        
         this.physics.add.collider(self.friendly, self.castle, function(){ });
+        this.physics.add.collider(self.friendly, self.village1, function(){ });
+        this.physics.add.collider(self.friendly, self.village2, function(){ });
+        this.physics.add.collider(self.friendly, self.village3, function(){ });
+        this.physics.add.collider(self.friendly, self.village4, function(){ });
+        this.physics.add.collider(self.friendly, self.village5, function(){ });
         
         
     },
@@ -92,28 +113,69 @@ var gamePlayState = new Phaser.Class({
 });
 
 function Friendly(x, y, game) {
-  var friendly = game.add.sprite(x, y, 'friendly');
-  friendly.speed = 80
-  friendly.xDest = x;
-  friendly.yDest = y;
-
-  friendly.setDest = function(x, y) {
+    var friendly = game.add.sprite(x, y, 'friendly');
+    var selected = false;
+    friendly.speed = 80
     friendly.xDest = x;
     friendly.yDest = y;
-  };
 
-  friendly.update = function() {
-    var self = this;
-    move(self);
+    friendly.setDest = function(x, y) {
+        if(selected == true){
+            friendly.xDest = x;
+            console.log("selected");
+            friendly.yDest = y;
+        }
+        else{
+            console.log("not Selected");
+        }
+    };
 
-  }
-  friendly.stop = function() {
-    var self = this;
-    self.xDest = self.x;
-    self.yDest = self.y;
+    friendly.update = function() {
+        var self = this;
+        move(self);
+    }
+    
+    friendly.isSelected = function(){
+        this.setTint(0xff0000);
+        selected = true;
+    }
 
-  }
-  return friendly;
+    friendly.stop = function() {
+        var self = this;
+        self.xDest = self.x;
+        self.yDest = self.y;
+    
+        //selected = false;
+        //this.clearTint();
+        
+
+    }
+    return friendly;
+}
+
+function Village(x, y, game) {
+    var village = game.add.sprite(x, y, 'villageNeutral');
+    var health;
+    village.xDest = x;
+    village.yDest = y;
+
+    village.setDest = function(x, y) {
+        village.xDest = x;
+        village.yDest = y;
+    };
+
+    village.update = function() {
+        var self = this;
+        
+        move(self);
+    }
+    village.stop = function() {
+        var self = this;
+        self.xDest = self.x;
+        self.yDest = self.y;
+
+    }
+    return village;
 }
 
 function move(self){
