@@ -7,7 +7,7 @@ var mainMenuState = new Phaser.Class({
     },
   
     preload: function() {
-        this.load.image('bg', 'Assets/Pictures/Menu.png');
+        this.load.image('bgMenu', 'Assets/Pictures/Menu.png');
         this.load.image('playButton', 'Assets/Pictures/button_play.png', 193, 71);
         this.load.image('exitButton', 'Assets/Pictures/button_exit.png', 193, 71);
         this.load.audio('MenuMusic', 'Assets/Music/mm_intro.ogg');
@@ -15,7 +15,7 @@ var mainMenuState = new Phaser.Class({
 
     create: function() {
         console.log("MainMenu");
-        let background = this.add.image(640, 400, 'bg');
+        let background = this.add.image(640, 400, 'bgMenu');
         
         let playButton = this.add.image(640, 300, 'playButton');
         playButton.setInteractive();
