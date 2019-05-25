@@ -70,11 +70,11 @@ var gamePlayState = new Phaser.Class({
         this.physics.add.existing(self.village5, true);
         
         //sprites for friendly
-        self.friendly = new Friendly(300, 200, self).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        self.friendly = new Friendly(574, 527, self).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        timer = this.time.addEvent({ delay: 3000, callback: onEvent, callbackScope: this, repeat: 10});
+        timer = this.time.addEvent({ delay: 25000, callback: onEvent, callbackScope: this, repeat: 10});
         
         game.input.activePointer.capture = true;
         
@@ -203,19 +203,18 @@ function move(self){
   }
 }
 
-function onEvent(){
-    this.gameitems = this.physics.add.group();
+function onEvent(){    this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = Phaser.Math.RND.between(0, 800);
                 
-        console.log("2");
-        this.troop = new Friendly(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.troop = new Friendly(647, 187, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop);
         this.physics.add.existing(this.troop, false);
-        
     }
 }
+
+
 
 // Add scene to list of scenes
 myGame.scenes.push(gamePlayState);
