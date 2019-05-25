@@ -16,6 +16,7 @@ var mainMenuState = new Phaser.Class({
     create: function() {
         console.log("MainMenu");
         let background = this.add.image(640, 400, 'bgMenu');
+        this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
         
         let playButton = this.add.image(351, 669, 'playButton');
         playButton.setInteractive();

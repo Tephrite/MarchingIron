@@ -204,7 +204,7 @@ function move(self){
 }
 
 function onEvent(){
-    this.friendly = this.add.group();
+    this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = Phaser.Math.RND.between(0, 800);
