@@ -17,7 +17,7 @@ var mainMenuState = new Phaser.Class({
         console.log("MainMenu");
         let background = this.add.image(640, 400, 'bgMenu');
         
-        let playButton = this.add.image(640, 300, 'playButton');
+        let playButton = this.add.image(351, 669, 'playButton');
         playButton.setInteractive();
         playButton.once('pointerdown', function(pointer){ 
             game.scene.start('GamePlay');
@@ -25,7 +25,7 @@ var mainMenuState = new Phaser.Class({
             
             });
         
-        let exitButton = this.add.image(640, 500, 'exitButton');
+        let exitButton = this.add.image(925, 669, 'exitButton');
         exitButton.setInteractive();
         exitButton.once('pointerdown', function(pointer){ window.close();});
         
