@@ -33,7 +33,7 @@ var gamePlayState = new Phaser.Class({
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
         
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
-        this.load.image('friendly', 'Assets/Pictures/nepoleon blue.png');
+        this.load.image('friendly', 'Assets/Pictures/nepoleon blue SMALL.png');
         this.load.image('villageNeutral', 'Assets/Pictures/SettlementOne1.png');
         this.load.image('villageCaptured', 'Assets/Pictures/SettlementOne2.png');
         this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
@@ -50,7 +50,7 @@ var gamePlayState = new Phaser.Class({
         var music= this.sound.add('bgMusic');
         music.play();
         
-        this.add.image(640, 400, 'bg');
+        var background = this.add.image(640, 400, 'bg');
         
         //sprites for castle
         this.castle = this.physics.add.sprite(640, 417, 'castle');
@@ -74,7 +74,7 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        timer = this.time.addEvent({ delay: 25000, callback: onEvent, callbackScope: this, repeat: 10});
+        timer = this.time.addEvent({ delay: 3000, callback: onEvent, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
@@ -150,16 +150,7 @@ function Friendly(x, y, game) {
         selected = true;
     }
 
-    friendly.stop = function() {
-        var self = this;
-        self.xDest = self.x;
-        self.yDest = self.y;
     
-        //selected = false;
-        //this.clearTint();
-        
-
-    }
     return friendly;
 }
 
@@ -203,14 +194,35 @@ function move(self){
   }
 }
 
-function onEvent(){    this.gameitems = this.physics.add.group();
+function onEvent(){    
+    this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = Phaser.Math.RND.between(0, 800);
                 
-        this.troop = new Friendly(647, 187, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop);
-        this.physics.add.existing(this.troop, false);
+        this.troop1 = new Friendly(360, 553, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop1);
+        this.physics.add.existing(this.troop1, false);
+        
+        this.troop2 = new Friendly(678, 176, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop2);
+        this.physics.add.existing(this.troop2, false);
+        
+        this.troop3 = new Friendly(983, 334, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop3);
+        this.physics.add.existing(this.troop3, false);
+        
+        this.troop4 = new Friendly(853, 563, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop4);
+        this.physics.add.existing(this.troop4, false);
+        
+        this.troop5 = new Friendly(907, 453, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop5);
+        this.physics.add.existing(this.troop5, false);
+        
+        this.troop6 = new Friendly(535, 500, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop6);
+        this.physics.add.existing(this.troop6, false);
     }
 }
 
