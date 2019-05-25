@@ -46,19 +46,17 @@ var gamePlayState = new Phaser.Class({
         var self = this;
         console.log("GamePlay");
         
+        this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
         var music= this.sound.add('bgMusic');
         music.play();
         
         this.add.image(640, 400, 'bg');
         
-        //sprites
+        //sprites for castle
         this.castle = this.physics.add.sprite(640, 417, 'castle');
         self.castle.body.immovable = true;
         
-        self.friendly = new Friendly(300, 200, self).setInteractive();
-        this.add.existing(self.friendly);
-        this.physics.add.existing(self.friendly, false);
-        
+        //sprites for village
         self.village1 = new Village(258, 615, self);
         self.village2 = new Village(574, 232, self);
         self.village3 = new Village(834, 677, self);
@@ -70,6 +68,13 @@ var gamePlayState = new Phaser.Class({
         this.physics.add.existing(self.village3, true);
         this.physics.add.existing(self.village4, true);
         this.physics.add.existing(self.village5, true);
+        
+        //sprites for friendly
+        self.friendly = new Friendly(300, 200, self).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(self.friendly);
+        this.physics.add.existing(self.friendly, false);
+        
+        timer = this.time.addEvent({ delay: 3000, callback: onEvent, callbackScope: this, repeat: 10});
         
         game.input.activePointer.capture = true;
         
@@ -114,6 +119,7 @@ var gamePlayState = new Phaser.Class({
 
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
+    //var friendly = game.gameitems.create(x, y, 'friendly');
     var selected = false;
     friendly.speed = 80
     friendly.xDest = x;
@@ -132,11 +138,15 @@ function Friendly(x, y, game) {
 
     friendly.update = function() {
         var self = this;
-        move(self);
+        if(selected == true){
+            move(self);
+        }
+        
     }
     
     friendly.isSelected = function(){
         this.setTint(0xff0000);
+        game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer');
         selected = true;
     }
 
@@ -166,8 +176,6 @@ function Village(x, y, game) {
 
     village.update = function() {
         var self = this;
-        
-        move(self);
     }
     village.stop = function() {
         var self = this;
@@ -193,6 +201,20 @@ function move(self){
   } else if (Math.floor(self.y) > Math.floor(self.yDest)) {
     self.body.velocity.y = -self.speed;
   }
+}
+
+function onEvent(){
+    this.friendly = this.add.group();
+    {
+        var x = Phaser.Math.RND.between(0, 1280);
+        var y = Phaser.Math.RND.between(0, 800);
+                
+        console.log("2");
+        this.troop = new Friendly(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop);
+        this.physics.add.existing(this.troop, false);
+        
+    }
 }
 
 // Add scene to list of scenes
