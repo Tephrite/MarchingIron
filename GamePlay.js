@@ -34,6 +34,7 @@ var gamePlayState = new Phaser.Class({
         
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue SMALL.png');
+        this.load.image('enemy', 'Assets/Pictures/nepoleonSmall.png');
         this.load.image('villageNeutral', 'Assets/Pictures/SettlementOne1.png');
         this.load.image('villageCaptured', 'Assets/Pictures/SettlementOne2.png');
         this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
@@ -74,16 +75,13 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        waveTimer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true}); 
-        
-        timer = this.time.addEvent({ delay: 3000, callback: onEvent, callbackScope: this, loop: true});
+        friendlySpawn = this.time.addEvent({ delay: 3000, callback: friendlySpawner, callbackScope: this, loop: true});
+        enemySpawn = this.time.addEvent({ delay: 3000, callback: enemySpawner, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
         //UI
         this.add.image(640, 400, 'ui');
-     var text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000')
-     var wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000')
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP2 = this.add.text(960, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -158,6 +156,30 @@ function Friendly(x, y, game) {
     return friendly;
 }
 
+function Enemy(x, y, game) {
+    var enemy = game.add.sprite(x, y, 'enemy');
+    //var friendly = game.gameitems.create(x, y, 'friendly');
+    var selected = false;
+    enemy.speed = 80
+    enemy.xDest = x;
+    enemy.yDest = y;
+
+    enemy.setDest = function(x, y) {
+        enemy.xDest = x;
+        enemy.yDest = y;
+
+    };
+
+    enemy.update = function() {
+        var self = this;
+        move(self);
+        
+    }
+    
+    return enemy;
+}
+
+
 function Village(x, y, game) {
     var village = game.add.sprite(x, y, 'villageNeutral');
     var health;
@@ -198,12 +220,10 @@ function move(self){
   }
 }
 
-function onEvent(){    
+function friendlySpawner(){    
     this.gameitems = this.physics.add.group();
     {
-        var x = Phaser.Math.RND.between(0, 1280);
-        var y = Phaser.Math.RND.between(0, 800);
-                
+    
         this.troop1 = new Friendly(360, 553, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
@@ -230,7 +250,34 @@ function onEvent(){
     }
 }
 
-
+function enemySpawner(){    
+    this.gameitems = this.physics.add.group();
+    {
+        var x = Phaser.Math.RND.between(0, 1280);
+        var y = 20
+                
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop1);
+        this.physics.add.existing(this.troop1, false);
+        
+        x = 10
+        y = Phaser.Math.RND.between(0, 800);
+        this.add.existing(this.troop1);
+        this.physics.add.existing(this.troop1, false);
+        
+                
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop1);
+        this.physics.add.existing(this.troop1, false);
+        
+        x = 1250
+        y = Phaser.Math.RND.between(0, 800);
+                
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.add.existing(this.troop1);
+        this.physics.add.existing(this.troop1, false);
+    }
+}
 
 // Add scene to list of scenes
 myGame.scenes.push(gamePlayState);
