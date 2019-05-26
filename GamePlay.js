@@ -57,15 +57,12 @@ var gamePlayState = new Phaser.Class({
         console.log("GamePlay");
         
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
-<<<<<<< HEAD
         this.sound.play('bgMusic');
 
-=======
         
         var music= this.sound.add('bgMusic');
         music.play();
         sfx = this.sound.add('spawnSound');
->>>>>>> e8a26835e1d3d08cfe6ca2fd1eb2267342ec7fca
         
         var background = this.add.image(640, 400, 'bg').setDepth(1);
         
@@ -171,10 +168,7 @@ function onTimer(){
     if (timeinSec == 0)
         {
             
-<<<<<<< HEAD
             this.sound.play('spawnSound');
-=======
->>>>>>> e8a26835e1d3d08cfe6ca2fd1eb2267342ec7fca
             timeinSec=40;
             waveInc++;
             wave.text = 'Wave ' + waveInc;
