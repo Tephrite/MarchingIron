@@ -6,6 +6,7 @@ var wave;
 var waveInc;
 var counter; 
 var score; 
+var music;
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -36,7 +37,6 @@ var gamePlayState = new Phaser.Class({
     
   
     preload: function() {
-        var time = 'null';
         waveInc = 1;
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
@@ -57,12 +57,11 @@ var gamePlayState = new Phaser.Class({
         console.log("GamePlay");
         
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
-        this.sound.play('bgMusic');
+        //this.sound.play('bgMusic');
 
         
-        var music= this.sound.add('bgMusic');
+        music= this.sound.add('bgMusic');
         music.play();
-        sfx = this.sound.add('spawnSound');
         
         var background = this.add.image(640, 400, 'bg').setDepth(1);
         
@@ -130,6 +129,10 @@ var gamePlayState = new Phaser.Class({
             //self.friendly.yDest = game.input.activePointer.y;
             console.log("Cursor\nx: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
             self.friendly.setDest(game.input.activePointer.x, game.input.activePointer.y);
+            //game.scene.stop('GamePlay');
+            //game.scene.start('EndScreen');
+            
+            //music.stop();
             
         }
         self.friendly.on('pointerdown', function () {
