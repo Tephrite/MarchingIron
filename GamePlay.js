@@ -6,6 +6,7 @@ var wave;
 var waveInc;
 var counter; 
 var score; 
+var sfx;
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -48,6 +49,7 @@ var gamePlayState = new Phaser.Class({
         this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
        
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
+        this.load.audio('spawnSound', 'Assets/Music/spawnSound1.ogg');
     },
 
     create: function() {
@@ -57,6 +59,7 @@ var gamePlayState = new Phaser.Class({
         
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
         var music= this.sound.add('bgMusic');
+        
         music.play();
         
         var background = this.add.image(640, 400, 'bg');
@@ -87,8 +90,8 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        friendlySpawn = this.time.addEvent({ delay: 1000, callback: friendlySpawner, callbackScope: this, loop: true});
-        enemySpawn = this.time.addEvent({ delay: 1000, callback: enemySpawner, callbackScope: this, loop: true});
+        friendlySpawn = this.time.addEvent({ delay: 40000, callback: friendlySpawner, callbackScope: this, loop: true});
+        enemySpawn = this.time.addEvent({ delay: 40000, callback: enemySpawner, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
@@ -148,6 +151,7 @@ var gamePlayState = new Phaser.Class({
 
 function onTimer(){
     //Creating time - implementing the seconds
+    sfx = this.sound.add('spawnSound');
     timeinSec --;
     if(timeinSec >= 10){
         var timeString = '0:' + timeinSec; 
@@ -162,6 +166,8 @@ function onTimer(){
     
     if (timeinSec == 0)
         {
+            
+            sfx.once('play', function(sfx){});
             timeinSec=40;
             waveInc++;
             wave.text = 'Wave ' + waveInc;
@@ -303,7 +309,7 @@ function friendlySpawner(){
 }
 
 function enemySpawner(){    
-  /*  this.gameitems = this.physics.add.group();
+    this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = 20
@@ -332,7 +338,7 @@ function enemySpawner(){
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
-    }*/
+    }
 }
 
 
