@@ -6,7 +6,6 @@ var wave;
 var waveInc;
 var counter; 
 var score; 
-var sfx;
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -58,9 +57,8 @@ var gamePlayState = new Phaser.Class({
         console.log("GamePlay");
         
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
-        var music= this.sound.add('bgMusic');
-        
-        music.play();
+        this.sound.play('bgMusic');
+
         
         var background = this.add.image(640, 400, 'bg');
         
@@ -151,7 +149,6 @@ var gamePlayState = new Phaser.Class({
 
 function onTimer(){
     //Creating time - implementing the seconds
-    sfx = this.sound.add('spawnSound');
     timeinSec --;
     if(timeinSec >= 10){
         var timeString = '0:' + timeinSec; 
@@ -167,7 +164,7 @@ function onTimer(){
     if (timeinSec == 0)
         {
             
-            sfx.once('play', function(sfx){});
+            this.sound.play('spawnSound');
             timeinSec=40;
             waveInc++;
             wave.text = 'Wave ' + waveInc;
