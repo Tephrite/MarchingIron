@@ -3,6 +3,7 @@ var timer;
 var timeText;
 var text;
 var wave;
+var counter;  
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -39,11 +40,11 @@ var gamePlayState = new Phaser.Class({
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue SMALL.png');
         this.load.image('enemy', 'Assets/Pictures/nepoleonSmall.png');
+        this.load.image('ui', 'Assets/Pictures/MapOneUI.png');
         this.load.image('villageNeutral', 'Assets/Pictures/SettlementOne1.png');
         this.load.image('villageCaptured', 'Assets/Pictures/SettlementOne2.png');
         this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
-        this.load.image('ui', 'Assets/Pictures/MapOneUI.png');
-        
+       
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
     },
 
@@ -62,9 +63,9 @@ var gamePlayState = new Phaser.Class({
         this.castle = this.physics.add.sprite(640, 417, 'castle');
         self.castle.body.immovable = true;
         
-        //Adding in timer for rounds. 
-        var waveTimer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true}); 
          
+        //UI
+        this.add.image(640, 400, 'ui');
         
         //sprites for village
         self.village1 = new Village(258, 615, self);
@@ -84,18 +85,30 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
-        friendlySpawn = this.time.addEvent({ delay: 3000, callback: friendlySpawner, callbackScope: this, loop: true});
-        enemySpawn = this.time.addEvent({ delay: 3000, callback: enemySpawner, callbackScope: this, loop: true});
+        friendlySpawn = this.time.addEvent({ delay: 1000, callback: friendlySpawner, callbackScope: this, loop: true});
+        enemySpawn = this.time.addEvent({ delay: 1000, callback: enemySpawner, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
-        //UI
-        this.add.image(640, 400, 'ui');
+        
+        //Creating variable to hold the score. 
+        var score = 0; 
+        
+        //Creating counter for time to check when time has finished. 
+        counter = 0; 
+        
+        //Setting amount of seconds with this variable. 
+        timeinSec = 40;
+        
+        //Adding time event.
+        timer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true});
         
         //Creating text for the ui
         text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
         
         wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+        
+        var score = this.add.text(61, 5, 'Score: ').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
         
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -104,7 +117,6 @@ var gamePlayState = new Phaser.Class({
         
         
     },
-    
 
 
     update: function() {
@@ -138,20 +150,68 @@ var gamePlayState = new Phaser.Class({
 
 function onTimer(){
       //Creating time - implementing the seconds
-        timeinSec = 40;
-    
-        //Adding time event.
-        timer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true});
-    
-        timeinSec -=1;
+        timeinSec --;
     var timeString = '0:' + timeinSec; 
         text.text = timeString;
+            
+            counter++;
     
-    if (timeinSec == 0) {
-        text.text = text; 
-        wave.text = "Wave 2"
+            if (counter == 1 && timeinSec == 0)
+            {
+                    
+                timer.reset(true); 
+                wave.text = 'Wave 2';          
+            }
+    
+            if (counter == 2 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 3';
+            }
+    
+            if (counter == 3 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 4';
+            }
+    
+            if (counter == 4 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 5';
+            }
+    
+            if (counter == 5 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 6';
+            }
+    
+            if (counter == 6 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 7';
+            }
+    
+            if (counter == 7 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 8';
+            }
+    
+            if (counter == 8 && timeinSec == 0)
+            {
+                timer.reset(true);
+                wave.text = 'Wave 9';
+            }
+    
+            if(counter === 9)
+            {
+                timer.remove(false);
+            }
+        
     }
-}
+
 
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
@@ -290,36 +350,34 @@ function enemySpawner(){
         var x = Phaser.Math.RND.between(0, 1280);
         var y = 20
                 
-        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
         
         x = 10
         y = Phaser.Math.RND.between(0, 800);
                 
-        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
         
         x = Phaser.Math.RND.between(0, 1280);
         y = 785
                 
-        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
         
         x = 1250
         y = Phaser.Math.RND.between(0, 800);
                 
-        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
     }
 }
 
-function waveTimer(){
-    
-}
+
 
 // Add scene to list of scenes
 myGame.scenes.push(gamePlayState);
