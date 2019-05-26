@@ -57,18 +57,25 @@ var gamePlayState = new Phaser.Class({
         console.log("GamePlay");
         
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
+<<<<<<< HEAD
         this.sound.play('bgMusic');
 
+=======
         
-        var background = this.add.image(640, 400, 'bg');
+        var music= this.sound.add('bgMusic');
+        music.play();
+        sfx = this.sound.add('spawnSound');
+>>>>>>> e8a26835e1d3d08cfe6ca2fd1eb2267342ec7fca
+        
+        var background = this.add.image(640, 400, 'bg').setDepth(1);
         
         //sprites for castle
-        this.castle = this.physics.add.sprite(640, 417, 'castle');
+        this.castle = this.physics.add.sprite(640, 417, 'castle').setDepth(2);
         self.castle.body.immovable = true;
         
          
         //UI
-        this.add.image(640, 400, 'ui');
+        this.add.image(640, 400, 'ui').setDepth(3);
         
         //sprites for village
         self.village1 = new Village(258, 615, self);
@@ -77,15 +84,15 @@ var gamePlayState = new Phaser.Class({
         self.village4 = new Village(970, 225, self);
         self.village5 = new Village(1024, 455, self);
         
-        this.physics.add.existing(self.village1, true);
-        this.physics.add.existing(self.village2, true);
-        this.physics.add.existing(self.village3, true);
-        this.physics.add.existing(self.village4, true);
-        this.physics.add.existing(self.village5, true);
+        this.physics.add.existing(self.village1, true).setDepth(2);
+        this.physics.add.existing(self.village2, true).setDepth(2);
+        this.physics.add.existing(self.village3, true).setDepth(2);
+        this.physics.add.existing(self.village4, true).setDepth(2);
+        this.physics.add.existing(self.village5, true).setDepth(2);
         
         //sprites for friendly
         self.friendly = new Friendly(574, 527, self).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(self.friendly);
+        this.add.existing(self.friendly).setDepth(2);
         this.physics.add.existing(self.friendly, false);
         
         friendlySpawn = this.time.addEvent({ delay: 40000, callback: friendlySpawner, callbackScope: this, loop: true});
@@ -104,9 +111,9 @@ var gamePlayState = new Phaser.Class({
         timer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true});
         
         //Creating text for the ui
-        text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+        text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
         
-        wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+        wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
     
         
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -164,7 +171,10 @@ function onTimer(){
     if (timeinSec == 0)
         {
             
+<<<<<<< HEAD
             this.sound.play('spawnSound');
+=======
+>>>>>>> e8a26835e1d3d08cfe6ca2fd1eb2267342ec7fca
             timeinSec=40;
             waveInc++;
             wave.text = 'Wave ' + waveInc;
@@ -280,27 +290,27 @@ function friendlySpawner(){
     {
     
         this.troop1 = new Friendly(360, 553, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop1);
+        this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
         
         this.troop2 = new Friendly(678, 176, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop2);
+        this.add.existing(this.troop2).setDepth(2);
         this.physics.add.existing(this.troop2, false);
         
         this.troop3 = new Friendly(983, 334, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop3);
+        this.add.existing(this.troop3).setDepth(2);
         this.physics.add.existing(this.troop3, false);
         
         this.troop4 = new Friendly(853, 563, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop4);
+        this.add.existing(this.troop4).setDepth(2);
         this.physics.add.existing(this.troop4, false);
         
         this.troop5 = new Friendly(907, 453, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop5);
+        this.add.existing(this.troop5).setDepth(2);
         this.physics.add.existing(this.troop5, false);
         
         this.troop6 = new Friendly(535, 500, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
-        this.add.existing(this.troop6);
+        this.add.existing(this.troop6).setDepth(2);
         this.physics.add.existing(this.troop6, false);
     }
 }
@@ -312,28 +322,28 @@ function enemySpawner(){
         var y = 20
                 
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
-        this.add.existing(this.troop1);
+        this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
         
         x = 10
         y = Phaser.Math.RND.between(0, 800);
                 
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
-        this.add.existing(this.troop1);
+        this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
         
         x = Phaser.Math.RND.between(0, 1280);
         y = 785
                 
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
-        this.add.existing(this.troop1);
+        this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
         
         x = 1250
         y = Phaser.Math.RND.between(0, 800);
                 
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
-        this.add.existing(this.troop1);
+        this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
     }
 }
