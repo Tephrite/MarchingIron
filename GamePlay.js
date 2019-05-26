@@ -3,7 +3,9 @@ var timer;
 var timeText;
 var text;
 var wave;
-var counter;  
+var waveInc;
+var counter; 
+var score; 
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -35,7 +37,7 @@ var gamePlayState = new Phaser.Class({
   
     preload: function() {
         var time = 'null';
-        
+        waveInc = 1;
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue SMALL.png');
@@ -91,9 +93,6 @@ var gamePlayState = new Phaser.Class({
         game.input.activePointer.capture = true;
         
         
-        //Creating variable to hold the score. 
-        var score = 0; 
-        
         //Creating counter for time to check when time has finished. 
         counter = 0; 
         
@@ -107,8 +106,7 @@ var gamePlayState = new Phaser.Class({
         text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
         
         wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
-        
-        var score = this.add.text(61, 5, 'Score: ').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+    
         
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -149,67 +147,27 @@ var gamePlayState = new Phaser.Class({
 });
 
 function onTimer(){
-      //Creating time - implementing the seconds
-        timeinSec --;
-    var timeString = '0:' + timeinSec; 
-        text.text = timeString;
-            
-            counter++;
+    //Creating time - implementing the seconds
+    timeinSec --;
+    if(timeinSec >= 10){
+        var timeString = '0:' + timeinSec; 
+    }
+    else{
+        var timeString = '0:0' + timeinSec; 
+    }
     
-            if (counter == 1 && timeinSec == 0)
-            {
-                    
-                timer.reset(true); 
-                wave.text = 'Wave 2';          
-            }
+    text.text = timeString;
+    console.log('time: ' + timeinSec +' counter: ' + counter);
+    counter++;
     
-            if (counter == 2 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 3';
-            }
-    
-            if (counter == 3 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 4';
-            }
-    
-            if (counter == 4 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 5';
-            }
-    
-            if (counter == 5 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 6';
-            }
-    
-            if (counter == 6 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 7';
-            }
-    
-            if (counter == 7 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 8';
-            }
-    
-            if (counter == 8 && timeinSec == 0)
-            {
-                timer.reset(true);
-                wave.text = 'Wave 9';
-            }
-    
-            if(counter === 9)
-            {
-                timer.remove(false);
-            }
-        
+    if (timeinSec == 0)
+        {
+            timeinSec=40;
+            waveInc++;
+            wave.text = 'Wave ' + waveInc;
+            counter = 0;                       
+        }
+
     }
 
 
@@ -345,7 +303,7 @@ function friendlySpawner(){
 }
 
 function enemySpawner(){    
-    this.gameitems = this.physics.add.group();
+  /*  this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = 20
@@ -374,7 +332,7 @@ function enemySpawner(){
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
-    }
+    }*/
 }
 
 
