@@ -1,3 +1,9 @@
+var timeinSec; 
+var timer;
+var timeText;
+var text;
+var wave;
+
 var gamePlayState = new Phaser.Class({
     // Define scene
     Extends: Phaser.Scene,
@@ -24,20 +30,19 @@ var gamePlayState = new Phaser.Class({
         
     },
     
+    
   
     preload: function() {
         var time = 'null';
-
-        this.load.image('ui', 'Assets/Pictures/MapOneUI.png');
         
         this.load.image('bg', 'Assets/Pictures/Map_1.png');
-        
         this.load.image('castle', 'Assets/Pictures/CastleOne1.png');
         this.load.image('friendly', 'Assets/Pictures/nepoleon blue SMALL.png');
         this.load.image('enemy', 'Assets/Pictures/nepoleonSmall.png');
         this.load.image('villageNeutral', 'Assets/Pictures/SettlementOne1.png');
         this.load.image('villageCaptured', 'Assets/Pictures/SettlementOne2.png');
         this.load.image('villageDestroyed', 'Assets/Pictures/SettlementOne3.png');
+        this.load.image('ui', 'Assets/Pictures/MapOneUI.png');
         
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
     },
@@ -56,6 +61,10 @@ var gamePlayState = new Phaser.Class({
         //sprites for castle
         this.castle = this.physics.add.sprite(640, 417, 'castle');
         self.castle.body.immovable = true;
+        
+        //Adding in timer for rounds. 
+        var waveTimer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true}); 
+         
         
         //sprites for village
         self.village1 = new Village(258, 615, self);
@@ -82,6 +91,12 @@ var gamePlayState = new Phaser.Class({
         
         //UI
         this.add.image(640, 400, 'ui');
+        
+        //Creating text for the ui
+        text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+        
+        wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000');
+        
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP2 = this.add.text(960, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -89,6 +104,8 @@ var gamePlayState = new Phaser.Class({
         
         
     },
+    
+
 
     update: function() {
         // Update objects & variables
@@ -116,8 +133,25 @@ var gamePlayState = new Phaser.Class({
         
         
     },
-
+    
 });
+
+function onTimer(){
+      //Creating time - implementing the seconds
+        timeinSec = 40;
+    
+        //Adding time event.
+        timer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true});
+    
+        timeinSec -=1;
+    var timeString = '0:' + timeinSec; 
+        text.text = timeString;
+    
+    if (timeinSec == 0) {
+        text.text = text; 
+        wave.text = "Wave 2"
+    }
+}
 
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
@@ -262,9 +296,13 @@ function enemySpawner(){
         
         x = 10
         y = Phaser.Math.RND.between(0, 800);
+                
+        this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
         
+        x = Phaser.Math.RND.between(0, 1280);
+        y = 785
                 
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop1);
@@ -277,6 +315,10 @@ function enemySpawner(){
         this.add.existing(this.troop1);
         this.physics.add.existing(this.troop1, false);
     }
+}
+
+function waveTimer(){
+    
 }
 
 // Add scene to list of scenes
