@@ -74,12 +74,16 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly);
         this.physics.add.existing(self.friendly, false);
         
+        waveTimer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true}); 
+        
         timer = this.time.addEvent({ delay: 3000, callback: onEvent, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
         //UI
         this.add.image(640, 400, 'ui');
+     var text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000')
+     var wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000')
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
         //vHP2 = this.add.text(960, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
