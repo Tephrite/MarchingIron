@@ -8,6 +8,7 @@ var counter;
 var score; 
 var music;
 
+
 var gamePlayState = new Phaser.Class({
     // Define scene
     Extends: Phaser.Scene,
@@ -109,7 +110,7 @@ var gamePlayState = new Phaser.Class({
         //Creating text for the ui
         text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
         
-        wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
+        wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
     
         
         //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
@@ -143,16 +144,17 @@ var gamePlayState = new Phaser.Class({
         
         
         this.physics.add.collider(self.friendly, self.castle, function(){ });
-        this.physics.add.collider(self.friendly, self.village1, function(){ });
-        this.physics.add.collider(self.friendly, self.village2, function(){ });
-        this.physics.add.collider(self.friendly, self.village3, function(){ });
-        this.physics.add.collider(self.friendly, self.village4, function(){ });
-        this.physics.add.collider(self.friendly, self.village5, function(){ });
+        this.physics.add.collider(self.friendly, self.village1, function(){ self.village1.setTexture('villageCaptured') });
+        this.physics.add.collider(self.friendly, self.village2, function(){ self.village2.setTexture('villageCaptured')  });
+        this.physics.add.collider(self.friendly, self.village3, function(){ self.village3.setTexture('villageCaptured')  });
+        this.physics.add.collider(self.friendly, self.village4, function(){ self.village4.setTexture('villageCaptured')  });
+        this.physics.add.collider(self.friendly, self.village5, function(){ self.village5.setTexture('villageCaptured')  });
         
         
     },
     
 });
+
 
 function onTimer(){
     //Creating time - implementing the seconds
@@ -218,6 +220,7 @@ function Friendly(x, y, game) {
     return friendly;
 }
 
+
 function Enemy(x, y, game) {
     var enemy = game.add.sprite(x, y, 'enemy');
     //var friendly = game.gameitems.create(x, y, 'friendly');
@@ -245,6 +248,7 @@ function Enemy(x, y, game) {
 function Village(x, y, game) {
     var village = game.add.sprite(x, y, 'villageNeutral');
     var health;
+    
     village.xDest = x;
     village.yDest = y;
 
