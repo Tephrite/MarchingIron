@@ -97,8 +97,8 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly).setDepth(2);
         this.physics.add.existing(self.friendly, false);
         
-        friendlySpawn = this.time.addEvent({ delay: 200000, callback: friendlySpawner, callbackScope: this, loop: true});
-        enemySpawn = this.time.addEvent({ delay: 40000, callback: enemySpawner, callbackScope: this, loop: true});
+        friendlySpawn = this.time.addEvent({ delay: 100000, callback: friendlySpawner, callbackScope: this, loop: true});
+        enemySpawn = this.time.addEvent({ delay: 20000, callback: enemySpawner, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
@@ -109,13 +109,13 @@ var gamePlayState = new Phaser.Class({
         counter = 0; 
         
         //Setting amount of seconds with this variable. 
-        timeinSec = 40;
+        timeinSec = 20;
         
         //Adding time event.
         timer = this.time.addEvent({ delay: 1000, callback: onTimer, callbackScope: this, loop: true});
         
         //Creating text for the ui
-        text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
+        text = this.add.text(985, 15, '00:20').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
         
         wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
         
@@ -214,18 +214,13 @@ var gamePlayState = new Phaser.Class({
                                       { 
                 enemy.destroy(); 
                 score = score+1; 
-                console.log("Score: "+score); 
-                if(self.friendly.getHealth() == 2)
-                {
-                    self.friendly.setTexture('friendlyInjured');
-                }else{
-                    //self.friendly.destroy();
-                } 
-                self.friendly.setHealth(1); 
+                console.log("Score: "+score);  
             });
         });
         
-        
+        if(waveInc == 5){
+            self.friendly.setTexture('friendlyInjured');
+        }
         //Friendly to Buildings Collider
         this.physics.add.collider(self.friendly, self.castle, function(){ });
         this.physics.add.collider(self.friendly, self.village1, function(){
@@ -290,7 +285,7 @@ function onTimer(){
         {
             
             this.sound.play('spawnSound');
-            timeinSec=40;
+            timeinSec=20;
             waveInc++;
             wave.text = 'Wave ' + waveInc;
             counter = 0;                       
@@ -335,7 +330,7 @@ function Friendly(x, y, game) {
     }
     
     friendly.isSelected = function(){
-        this.setTint(0xff0000);
+        //this.setTint(0xff0000);
         game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer');
         selected = true;
     }
@@ -491,7 +486,7 @@ function enemySpawner(){
     console.log(waveInc);
     console.log(counter2);
     counter2 = 0;
-    while(counter2 < waveInc){
+    
             var x = Phaser.Math.RND.between(0, 1280);
             var y = 20
             this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
@@ -503,7 +498,7 @@ function enemySpawner(){
             x = Phaser.Math.RND.between(0, 1280);
             y = 785
             this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
-    
+   while(counter2 < waveInc){ 
             x = 1250
             y = Phaser.Math.RND.between(0, 800);
             this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));

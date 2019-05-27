@@ -16,24 +16,29 @@ var endScreenState = new Phaser.Class({
 
     create: function() {
         console.log("EndScreen");
-        let background = this.add.image(640, 400, 'bgEnd').setDepth(2);
+        var background = this.add.image(640, 400, 'bgEnd');
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
         
-        var scoreText = this.add.text(1034,434, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF').setDepth(3);
+        var scoreText = this.add.text(1034,434, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF');
         scoreText.text=score;
         
-        var wavesReached = this.add.text(1034, 530, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF').setDepth(3);
+        var wavesReached = this.add.text(1034, 530, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF');
         wavesReached.text=waveInc;
         
-        let playButton = this.add.image(332, 696, 'playButton');
+        var playButton = this.add.image(332, 696, 'playButton');
         playButton.setInteractive();
         playButton.once('pointerdown', function(pointer){ 
             game.scene.start('GamePlay');
             music.stop();
+            background.visible = false;
+            playButton.visible = false;
+            exitButton.visible = false;
+            scoreText.visible = false;
+            wavesReached.visible = false;
             
             });
         
-        let exitButton = this.add.image(948, 696, 'exitButton');
+        var exitButton = this.add.image(948, 696, 'exitButton');
         exitButton.setInteractive();
         exitButton.once('pointerdown', function(pointer){ window.close();});
         
