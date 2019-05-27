@@ -8,6 +8,8 @@ var counter;
 var score; 
 var music;
 
+var v1HP, v2HP, v3HP, v4HP, v5HP, castleHP;
+
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -111,14 +113,14 @@ var gamePlayState = new Phaser.Class({
         text = this.add.text(985, 15, '00:40').setFontFamily('Stencil').setFontSize(32).setColor('#000000').setDepth(3);
         
         wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        
+        v1HP = this.add.text(250, 663, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v2HP = this.add.text(569, 279, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v3HP = this.add.text(967, 273, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v4HP = this.add.text(1017, 505, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v5HP = this.add.text(831, 725, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        castleHP = this.add.text(633, 481, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
     
-        
-        //cHP = this.add.text(478, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
-        //vHP1 = this.add.text(700, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
-        //vHP2 = this.add.text(960, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
-        //round = this.add.text(1200, 10, '1').setFontFamily('Arial').setFontSize(48).setColor('#ffff00');
-        
-        
     },
 
 
@@ -144,11 +146,42 @@ var gamePlayState = new Phaser.Class({
         
         
         this.physics.add.collider(self.friendly, self.castle, function(){ });
-        this.physics.add.collider(self.friendly, self.village1, function(){ self.village1.setTexture('villageCaptured') });
-        this.physics.add.collider(self.friendly, self.village2, function(){ self.village2.setTexture('villageCaptured')  });
-        this.physics.add.collider(self.friendly, self.village3, function(){ self.village3.setTexture('villageCaptured')  });
-        this.physics.add.collider(self.friendly, self.village4, function(){ self.village4.setTexture('villageCaptured')  });
-        this.physics.add.collider(self.friendly, self.village5, function(){ self.village5.setTexture('villageCaptured')  });
+        
+        this.physics.add.collider(self.friendly, self.village1, function(){
+            if(self.village1.getSourceImage = 'villageNeutral'){
+                self.village1.setTexture('villageCaptured');
+                v1HP.text = '3';
+                }
+            });
+                
+        
+        this.physics.add.collider(self.friendly, self.village2, function(){
+            if(self.village2.getSourceImage = 'villageNeutral'){
+                self.village2.setTexture('villageCaptured');
+                v2HP.text = '3';
+                }
+            });
+        
+        this.physics.add.collider(self.friendly, self.village3, function(){
+            if(self.village3.getSourceImage = 'villageNeutral'){
+                self.village3.setTexture('villageCaptured');
+                v3HP.text = '3';
+                }
+            });
+        
+        this.physics.add.collider(self.friendly, self.village4, function(){
+            if(self.village4.getSourceImage = 'villageNeutral'){
+                self.village4.setTexture('villageCaptured');
+                v4HP.text = '3';
+                }
+            });
+        
+        this.physics.add.collider(self.friendly, self.village5, function(){
+            if(self.village5.getSourceImage = 'villageNeutral'){
+                self.village5.setTexture('villageCaptured');
+                v5HP.text = '3';
+                }
+            });
         
         
     },
@@ -247,7 +280,7 @@ function Enemy(x, y, game) {
 
 function Village(x, y, game) {
     var village = game.add.sprite(x, y, 'villageNeutral');
-    var health;
+    var health = 3;
     
     village.xDest = x;
     village.yDest = y;
