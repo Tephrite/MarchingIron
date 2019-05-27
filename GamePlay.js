@@ -5,8 +5,10 @@ var text;
 var wave;
 var waveInc;
 var counter; 
-var score; 
+var score = 0; 
 var music;
+var selected;
+
 
 var v1HP, v2HP, v3HP, v4HP, v5HP, castleHP;
 var v1HPInt, v2HPInt, v3HPInt, v4HPInt, v5HPInt, castleHPInt;
@@ -149,6 +151,25 @@ var gamePlayState = new Phaser.Class({
             self.friendly.isSelected();
         });
         
+        if (game.input.activePointer.isDown && selected == true){
+            
+                self.friendly.on('pointerdown', function() { 
+                self.friendly.isDeselected();
+        });  
+            }
+        
+        if (game.input.activePointer.isDown && selected == false){
+            
+            self.friendly.on('pointerdown', function () {
+                self.friendly.isReselected(); 
+            });
+        }
+    
+                
+            
+                
+        
+        
         self.friendly.update();
         
         self.mob.children.each(function(enemy, index) {
@@ -289,7 +310,7 @@ function onTimer(){
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
     var health = 2;
-    var selected = false;
+    selected = selected;
     friendly.speed = 100
     friendly.xDest = x;
     friendly.yDest = y;
@@ -326,7 +347,34 @@ function Friendly(x, y, game) {
         game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer');
         selected = true;
     }
-
+    
+    friendly.isDeselected = function() {
+        this.clearTint();
+        game.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
+        selected = false; 
+        friendly.stop();
+        console.log(friendly.stop);
+     
+    }
+    
+    friendly.isReselected = function (){
+    if (selected == false){
+        this.setTint(0xff0000);
+        game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer' ); 
+        selected = true;
+        move(self); 
+    }
+        
+    }
+    
+    
+    friendly.stop = function() {
+        var self = this; 
+        self.xDest = self.x;
+        self.yDest = self.y; 
+        self.speed = 0; 
+        
+    }
     
     return friendly;
 }
@@ -398,7 +446,7 @@ function Enemy(x, y, game) {
 
 
 function Village(x, y, game) {
-    var village = game.add.sprite(x, y, 'villageNeutral');
+   var village = game.add.sprite(x, y, 'villageNeutral');
     var health = 3;
     
     village.xDest = x;
