@@ -5,6 +5,7 @@ var text;
 var wave;
 var waveInc;
 var counter; 
+var counter2 = 0;
 var score = 0; 
 var music;
 
@@ -96,12 +97,13 @@ var gamePlayState = new Phaser.Class({
         this.add.existing(self.friendly).setDepth(2);
         this.physics.add.existing(self.friendly, false);
         
-        friendlySpawn = this.time.addEvent({ delay: 40000, callback: friendlySpawner, callbackScope: this, loop: true});
+        friendlySpawn = this.time.addEvent({ delay: 200000, callback: friendlySpawner, callbackScope: this, loop: true});
         enemySpawn = this.time.addEvent({ delay: 40000, callback: enemySpawner, callbackScope: this, loop: true});
         
         game.input.activePointer.capture = true;
         
         self.mob = this.physics.add.group();
+        self.friendlyTroop = this.physics.add.group();
         
         //Creating counter for time to check when time has finished. 
         counter = 0; 
@@ -213,11 +215,10 @@ var gamePlayState = new Phaser.Class({
                 enemy.destroy(); 
                 score = score+1; 
                 console.log("Score: "+score); 
-                if(self.friendly.getHealth == 2)
+                if(self.friendly.getHealth() == 2)
                 {
                     self.friendly.setTexture('friendlyInjured');
                 }else{
-                    console.log("a suuuuh dude"); 
                     //self.friendly.destroy();
                 } 
                 self.friendly.setHealth(1); 
@@ -302,7 +303,7 @@ function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
     var health = 2;
     var selected = false;
-    friendly.speed = 100
+    friendly.speed = 120
     friendly.xDest = x;
     friendly.yDest = y;
 
@@ -450,10 +451,16 @@ function move(self){
   }
 }
 
-function friendlySpawner(){    
-    this.gameitems = this.physics.add.group();
+function friendlySpawner(){   
+    this.friendlyTroop.add(Friendly(360, 553, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'}));
+    this.friendlyTroop.add(Friendly(983, 334, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'}));
+    this.friendlyTroop.add(Friendly(853, 863, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'}));
+    this.friendlyTroop.add(Friendly(907, 453, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'}));
+    this.friendlyTroop.add(Friendly(535, 500, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'}));
+    /*this.gameitems = this.physics.add.group();
     {
     
+        
         this.troop1 = new Friendly(360, 553, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
@@ -477,31 +484,36 @@ function friendlySpawner(){
         this.troop6 = new Friendly(535, 500, this).setInteractive( { cursor: 'url(Assets/Pictures/basicBoots.cur), pointer'});
         this.add.existing(this.troop6).setDepth(2);
         this.physics.add.existing(this.troop6, false);
-    }
+    }*/
 }
 
 function enemySpawner(){
-    
-    var x = Phaser.Math.RND.between(0, 1280);
-    var y = 20
-    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+    console.log(waveInc);
+    console.log(counter2);
+    counter2 = 0;
+    while(counter2 < waveInc){
+            var x = Phaser.Math.RND.between(0, 1280);
+            var y = 20
+            this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
 
-    x = 10
-    y = Phaser.Math.RND.between(0, 800);
-    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+            x = 10
+            y = Phaser.Math.RND.between(0, 800);
+            this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
     
-    x = Phaser.Math.RND.between(0, 1280);
-    y = 785
-    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+            x = Phaser.Math.RND.between(0, 1280);
+            y = 785
+            this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
     
-    x = 1250
-    y = Phaser.Math.RND.between(0, 800);
-    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+            x = 1250
+            y = Phaser.Math.RND.between(0, 800);
+            this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
     
-    this.mob.children.each(function(enemy, index) {
-        enemy.body.immovable = true;
-    });
-    
+            this.mob.children.each(function(enemy, index) {
+            enemy.body.immovable = true;
+            });
+        counter2 = counter2+1;
+    }
+     
 }
 
 
