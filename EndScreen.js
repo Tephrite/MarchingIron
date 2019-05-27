@@ -35,6 +35,7 @@ var endScreenState = new Phaser.Class({
             exitButton.visible = false;
             scoreText.visible = false;
             wavesReached.visible = false;
+            score = 0;
             
             });
         
