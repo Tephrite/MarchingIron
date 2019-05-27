@@ -9,7 +9,7 @@ var score;
 var music;
 
 var v1HP, v2HP, v3HP, v4HP, v5HP, castleHP;
-
+var v1HPInt, v2HPInt, v3HPInt, v4HPInt, v5HPInt, castleHPInt;
 
 var gamePlayState = new Phaser.Class({
     // Define scene
@@ -36,6 +36,7 @@ var gamePlayState = new Phaser.Class({
         yDest: null,
         
     },
+    mob: null,
     
     
   
@@ -62,7 +63,6 @@ var gamePlayState = new Phaser.Class({
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
         //this.sound.play('bgMusic');
 
-        
         music= this.sound.add('bgMusic');
         music.play();
         
@@ -99,6 +99,7 @@ var gamePlayState = new Phaser.Class({
         
         game.input.activePointer.capture = true;
         
+        self.mob = this.physics.add.group();
         
         //Creating counter for time to check when time has finished. 
         counter = 0; 
@@ -114,12 +115,15 @@ var gamePlayState = new Phaser.Class({
         
         wave = this.add.text(1164, 15, 'Wave 1').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
         
-        v1HP = this.add.text(250, 663, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v1HP = this.add.text(250, 663, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3); 
         v2HP = this.add.text(569, 279, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
-        v3HP = this.add.text(967, 273, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
-        v4HP = this.add.text(1017, 505, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
-        v5HP = this.add.text(831, 725, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
-        castleHP = this.add.text(633, 481, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v3HP = this.add.text(831, 725, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v4HP = this.add.text(967, 273, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        v5HP = this.add.text(1017, 505, '-').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        castleHP = this.add.text(633, 481, '5').setFontFamily('Stencil').setFontSize(30).setColor('#000000').setDepth(3);
+        
+        v1HPInt = v2HPInt = v3HPInt = v4HPInt = v5HPInt = 3;
+        castleHPInt = 5;
     
     },
 
@@ -144,13 +148,70 @@ var gamePlayState = new Phaser.Class({
         
         self.friendly.update();
         
+        self.mob.children.each(function(enemy, index) {
+            if(enemy.closestVillage() == 1){
+                enemy.setDest(self.village1.x, self.village1.y);
+                enemy.update();
+            }
+            else if(enemy.closestVillage() == 2){
+                enemy.setDest(self.village2.x, self.village2.y);
+                enemy.update();
+            }
+            else if(enemy.closestVillage() == 3){
+                enemy.setDest(self.village3.x, self.village3.y);
+                enemy.update();
+            }
+            else if(enemy.closestVillage() == 4){
+                enemy.setDest(self.village4.x, self.village4.y);
+                enemy.update();
+            }
+            else if(enemy.closestVillage() == 5){
+                enemy.setDest(self.village5.x, self.village5.y);
+                enemy.update();
+            }
+            else {
+                enemy.setDest(self.castle.x, self.castle.y);
+                enemy.update();
+            }
+            
+            //self.physics.add.existing(enemy, false);
+            
+            if(v1HP.text === '3' || v1HP.text === '2' || v1HP.text === '1'){
+                if(v1HPInt != 0){
+                    self.physics.add.collider(enemy, self.village1, function(){ v1HPInt--; v1HP.text = v1HPInt; enemy.destroy(); console.log("Village 1 Hit: "+v1HPInt+ " HP remaining"); if(v1HPInt == 0){ self.village1.setTexture('villageDestroyed'); } });
+                }
+            }
+            if(v2HP.text === '3' || v2HP.text === '2' || v2HP.text === '1'){
+                if(v2HPInt != 0){
+                    self.physics.add.collider(enemy, self.village2, function(){ v2HPInt--; v2HP.text = v2HPInt; enemy.destroy(); console.log("Village 2 Hit: "+v2HPInt+ " HP remaining"); if(v2HPInt == 0){ self.village2.setTexture('villageDestroyed'); } });
+                }
+            }
+            if(v3HP.text === '3' || v3HP.text === '2' || v3HP.text === '1'){
+                if(v3HPInt != 0){
+                    self.physics.add.collider(enemy, self.village3, function(){ v3HPInt--; v3HP.text = v3HPInt; enemy.destroy(); console.log("Village 3 Hit: "+v3HPInt+ " HP remaining"); if(v3HPInt == 0){ self.village3.setTexture('villageDestroyed'); } });
+                }
+            }
+            if(v4HP.text === '3' || v4HP.text === '2' || v4HP.text === '1'){
+                if(v4HPInt != 0){
+                    self.physics.add.collider(enemy, self.village4, function(){ v4HPInt--; v4HP.text = v4HPInt; enemy.destroy(); console.log("Village 4 Hit: "+v4HPInt+ " HP remaining"); if(v4HPInt == 0){ self.village4.setTexture('villageDestroyed'); } });
+                }
+            }
+            if(v5HP.text === '3' || v5HP.text === '2' || v5HP.text === '1'){
+                if(v5HPInt != 0){
+                    self.physics.add.collider(enemy, self.village5, function(){ v5HPInt--; v5HP.text = v5HPInt; enemy.destroy(); console.log("Village 5 Hit: "+v5HPInt+ " HP remaining"); if(v5HPInt == 0){ self.village5.setTexture('villageDestroyed'); } });
+                }
+            }
+            if(v1HPInt <= 0 && v2HPInt <= 0 && v3HPInt <= 0 && v4HPInt <= 0 && v5HPInt <= 0){
+                self.physics.add.collider(enemy, self.castle, function(){ castleHP.text = castleHPInt--; enemy.destroy(); console.log("Castle Hit");});
+            }
+        });
         
         this.physics.add.collider(self.friendly, self.castle, function(){ });
         
         this.physics.add.collider(self.friendly, self.village1, function(){
             if(self.village1.getSourceImage = 'villageNeutral'){
                 self.village1.setTexture('villageCaptured');
-                v1HP.text = '3';
+                v1HP.text = v1HPInt;
                 }
             });
                 
@@ -158,28 +219,28 @@ var gamePlayState = new Phaser.Class({
         this.physics.add.collider(self.friendly, self.village2, function(){
             if(self.village2.getSourceImage = 'villageNeutral'){
                 self.village2.setTexture('villageCaptured');
-                v2HP.text = '3';
+                v2HP.text = v2HPInt;
                 }
             });
         
         this.physics.add.collider(self.friendly, self.village3, function(){
             if(self.village3.getSourceImage = 'villageNeutral'){
                 self.village3.setTexture('villageCaptured');
-                v3HP.text = '3';
+                v3HP.text = v3HPInt;
                 }
             });
         
         this.physics.add.collider(self.friendly, self.village4, function(){
             if(self.village4.getSourceImage = 'villageNeutral'){
                 self.village4.setTexture('villageCaptured');
-                v4HP.text = '3';
+                v4HP.text = v4HPInt;
                 }
             });
         
         this.physics.add.collider(self.friendly, self.village5, function(){
             if(self.village5.getSourceImage = 'villageNeutral'){
                 self.village5.setTexture('villageCaptured');
-                v5HP.text = '3';
+                v5HP.text = v5HPInt;
                 }
             });
         
@@ -218,7 +279,6 @@ function onTimer(){
 
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
-    //var friendly = game.gameitems.create(x, y, 'friendly');
     var selected = false;
     friendly.speed = 80
     friendly.xDest = x;
@@ -256,12 +316,11 @@ function Friendly(x, y, game) {
 
 function Enemy(x, y, game) {
     var enemy = game.add.sprite(x, y, 'enemy');
-    //var friendly = game.gameitems.create(x, y, 'friendly');
     var selected = false;
     enemy.speed = 80
     enemy.xDest = x;
     enemy.yDest = y;
-
+    
     enemy.setDest = function(x, y) {
         enemy.xDest = x;
         enemy.yDest = y;
@@ -274,6 +333,21 @@ function Enemy(x, y, game) {
         
     }
     
+    enemy.closestVillage = function() {
+        var self = this;
+        var vDistance = 
+            [Math.round(Math.sqrt(Math.abs(((game.village1.x - x)^2) + ((game.village1.y - y)^2)))),
+            Math.round(Math.sqrt(Math.abs(((game.village2.x - x)^2) + ((game.village2.y - y)^2)))),
+            Math.round(Math.sqrt(Math.abs(((game.village3.x - x)^2) + ((game.village3.y - y)^2)))),
+            Math.round(Math.sqrt(Math.abs(((game.village4.x - x)^2) + ((game.village4.y - y)^2)))),
+            Math.round(Math.sqrt(Math.abs(((game.village5.x - x)^2) + ((game.village5.y - y)^2))))];
+        //console.log(x+" -- "+y+"\n");
+        //console.log("1. "+vDistance[0]+" 2. "+vDistance[1]+" 3. "+vDistance[2]+" 4. "+vDistance[3]+" 5. "+vDistance[4]);
+        //villageSelected = (vDistance.indexOf(Math.min(...vDistance)))+1;
+        
+        return ((vDistance.indexOf(Math.min(...vDistance)))+1);
+    }
+    enemy.closestVillage();
     return enemy;
 }
 
@@ -349,8 +423,31 @@ function friendlySpawner(){
     }
 }
 
-function enemySpawner(){    
-    this.gameitems = this.physics.add.group();
+function enemySpawner(){
+    
+    var x = Phaser.Math.RND.between(0, 1280);
+    var y = 20
+    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+
+    x = 10
+    y = Phaser.Math.RND.between(0, 800);
+    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+    
+    x = Phaser.Math.RND.between(0, 1280);
+    y = 785
+    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+    
+    x = 1250
+    y = Phaser.Math.RND.between(0, 800);
+    this.mob.add(Enemy(x, y, this).setDepth(2).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'}));
+    
+    this.mob.children.each(function(enemy, index) {
+        enemy.body.immovable = true;
+    });
+    
+    
+    
+    /*this.gameitems = this.physics.add.group();
     {
         var x = Phaser.Math.RND.between(0, 1280);
         var y = 20
@@ -379,7 +476,7 @@ function enemySpawner(){
         this.troop1 = new Enemy(x, y, this).setInteractive( { cursor: 'url(Assets/Pictures/basicRifle.cur), pointer'});
         this.add.existing(this.troop1).setDepth(2);
         this.physics.add.existing(this.troop1, false);
-    }
+    }*/
 }
 
 
