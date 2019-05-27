@@ -15,8 +15,14 @@ var endScreenState = new Phaser.Class({
 
     create: function() {
         console.log("EndScreen");
-        let background = this.add.image(640, 400, 'bgEnd');
+        let background = this.add.image(640, 400, 'bgEnd').setDepth(2);
         this.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
+        
+        var ScoreText = this.add.text(1034,439, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF').setDepth(3);
+        scoreText.text=score;
+        
+        var wavesReached = this.add.text(1125, 541, '').setFontFamily('Stencil').setFontSize(55).setColor('#FFFFFF').setDepth(3);
+        wavesReach.text=waveInc;
         
         let playButton = this.add.image(332, 696, 'playButton');
         playButton.setInteractive();

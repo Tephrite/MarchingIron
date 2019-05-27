@@ -5,7 +5,7 @@ var text;
 var wave;
 var waveInc;
 var counter; 
-var score; 
+var score = 0; 
 var music;
 
 var v1HP, v2HP, v3HP, v4HP, v5HP, castleHP;
@@ -137,7 +137,7 @@ var gamePlayState = new Phaser.Class({
         if (game.input.activePointer.isDown){
             //self.friendly.xDest = game.input.activePointer.x;
             //self.friendly.yDest = game.input.activePointer.y;
-            console.log("Cursor\nx: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
+            //console.log("Cursor\nx: "+game.input.activePointer.x+" y: "+game.input.activePointer.y);
             self.friendly.setDest(game.input.activePointer.x, game.input.activePointer.y);
             //game.scene.stop('GamePlay');
             //game.scene.start('EndScreen');
@@ -209,7 +209,20 @@ var gamePlayState = new Phaser.Class({
             }
             
             //Enemy to Player Collider
-            self.physics.add.collider(self.friendly, enemy, function(){ enemy.destroy(); if(self.friendly.getHealth = 2){self.friendly.setTexture('friendlyInjured');}else{console.log("a suuuuh dude"); self.friendly.destroy();} self.friendly.setHealth(1); self.friendly.update();});
+            self.physics.add.collider(self.friendly, enemy, function()
+                                      { 
+                enemy.destroy(); 
+                score = score+1; 
+                console.log("Score: "+score); 
+                if(self.friendly.getHealth == 2)
+                {
+                    self.friendly.setTexture('friendlyInjured');
+                }else{
+                    console.log("a suuuuh dude"); 
+                    //self.friendly.destroy();
+                } 
+                self.friendly.setHealth(1); 
+            });
         });
         
         
@@ -270,7 +283,7 @@ function onTimer(){
     }
     
     text.text = timeString;
-    console.log('time: ' + timeinSec +' counter: ' + counter);
+    //console.log('time: ' + timeinSec +' counter: ' + counter);
     counter++;
     
     if (timeinSec == 0)
@@ -297,7 +310,7 @@ function Friendly(x, y, game) {
     friendly.setDest = function(x, y) {
         if(selected == true){
             friendly.xDest = x;
-            console.log("selected");
+            //console.log("selected");
             friendly.yDest = y;
         }
         else{
