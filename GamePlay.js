@@ -7,8 +7,6 @@ var waveInc;
 var counter; 
 var score = 0; 
 var music;
-var selected;
-
 
 var v1HP, v2HP, v3HP, v4HP, v5HP, castleHP;
 var v1HPInt, v2HPInt, v3HPInt, v4HPInt, v5HPInt, castleHPInt;
@@ -21,10 +19,8 @@ var gamePlayState = new Phaser.Class({
         Phaser.Scene.call(this, {key: 'GamePlay'});
     },
     
-    castle:{
-        xDest: null,
-        yDest: null,
-        
+    friendlyTroop:{
+        mob: null,       
     },
     
     village:{
@@ -58,6 +54,7 @@ var gamePlayState = new Phaser.Class({
        
         this.load.audio('bgMusic', 'Assets/Music/background sound/beethoven_symphony_5_1.ogg');
         this.load.audio('spawnSound', 'Assets/Music/spawnSound1.ogg');
+        this.load.audio('damageSound', 'Assets/Music/battleSound1.ogg');
     },
 
     create: function() {
@@ -151,25 +148,6 @@ var gamePlayState = new Phaser.Class({
             self.friendly.isSelected();
         });
         
-        if (game.input.activePointer.isDown && selected == true){
-            
-                self.friendly.on('pointerdown', function() { 
-                self.friendly.isDeselected();
-        });  
-            }
-        
-        if (game.input.activePointer.isDown && selected == false){
-            
-            self.friendly.on('pointerdown', function () {
-                self.friendly.isReselected(); 
-            });
-        }
-    
-                
-            
-                
-        
-        
         self.friendly.update();
         
         self.mob.children.each(function(enemy, index) {
@@ -202,27 +180,27 @@ var gamePlayState = new Phaser.Class({
             //Enemy to Bulding Colliders
             if(v1HP.text === '3' || v1HP.text === '2' || v1HP.text === '1'){
                 if(v1HPInt != 0){
-                    self.physics.add.collider(enemy, self.village1, function(){ v1HPInt--; v1HP.text = v1HPInt; enemy.destroy(); console.log("Village 1 Hit: "+v1HPInt+ " HP remaining"); if(v1HPInt == 0){ self.village1.setTexture('villageDestroyed'); } });
+                    self.physics.add.collider(enemy, self.village1, function(){ v1HPInt--; v1HP.text = v1HPInt; enemy.destroy(); self.sound.play('damageSound'); console.log("Village 1 Hit: "+v1HPInt+ " HP remaining"); if(v1HPInt == 0){ self.village1.setTexture('villageDestroyed'); } });
                 }
             }
             if(v2HP.text === '3' || v2HP.text === '2' || v2HP.text === '1'){
                 if(v2HPInt != 0){
-                    self.physics.add.collider(enemy, self.village2, function(){ v2HPInt--; v2HP.text = v2HPInt; enemy.destroy(); console.log("Village 2 Hit: "+v2HPInt+ " HP remaining"); if(v2HPInt == 0){ self.village2.setTexture('villageDestroyed'); } });
+                    self.physics.add.collider(enemy, self.village2, function(){ v2HPInt--; v2HP.text = v2HPInt; enemy.destroy(); self.sound.play('damageSound'); console.log("Village 2 Hit: "+v2HPInt+ " HP remaining"); if(v2HPInt == 0){ self.village2.setTexture('villageDestroyed'); } });
                 }
             }
             if(v3HP.text === '3' || v3HP.text === '2' || v3HP.text === '1'){
                 if(v3HPInt != 0){
-                    self.physics.add.collider(enemy, self.village3, function(){ v3HPInt--; v3HP.text = v3HPInt; enemy.destroy(); console.log("Village 3 Hit: "+v3HPInt+ " HP remaining"); if(v3HPInt == 0){ self.village3.setTexture('villageDestroyed'); } });
+                    self.physics.add.collider(enemy, self.village3, function(){ v3HPInt--; v3HP.text = v3HPInt; enemy.destroy(); self.sound.play('damageSound'); console.log("Village 3 Hit: "+v3HPInt+ " HP remaining"); if(v3HPInt == 0){ self.village3.setTexture('villageDestroyed'); } });
                 }
             }
             if(v4HP.text === '3' || v4HP.text === '2' || v4HP.text === '1'){
                 if(v4HPInt != 0){
-                    self.physics.add.collider(enemy, self.village4, function(){ v4HPInt--; v4HP.text = v4HPInt; enemy.destroy(); console.log("Village 4 Hit: "+v4HPInt+ " HP remaining"); if(v4HPInt == 0){ self.village4.setTexture('villageDestroyed'); } });
+                    self.physics.add.collider(enemy, self.village4, function(){ v4HPInt--; v4HP.text = v4HPInt; enemy.destroy(); self.sound.play('damageSound'); console.log("Village 4 Hit: "+v4HPInt+ " HP remaining"); if(v4HPInt == 0){ self.village4.setTexture('villageDestroyed'); } });
                 }
             }
             if(v5HP.text === '3' || v5HP.text === '2' || v5HP.text === '1'){
                 if(v5HPInt != 0){
-                    self.physics.add.collider(enemy, self.village5, function(){ v5HPInt--; v5HP.text = v5HPInt; enemy.destroy(); console.log("Village 5 Hit: "+v5HPInt+ " HP remaining"); if(v5HPInt == 0){ self.village5.setTexture('villageDestroyed'); } });
+                    self.physics.add.collider(enemy, self.village5, function(){ v5HPInt--; v5HP.text = v5HPInt; enemy.destroy(); self.sound.play('damageSound'); console.log("Village 5 Hit: "+v5HPInt+ " HP remaining"); if(v5HPInt == 0){ self.village5.setTexture('villageDestroyed'); } });
                 }
             }
             if((v1HPInt <= 0 || v1HP.text === '-') && (v2HPInt <= 0 || v2HP.text==='-') && (v3HPInt <= 0 || v3HP.text==='-') && (v4HPInt <= 0 || v4HP.text==='-') && (v5HPInt <= 0 || v5HP.text==='-')){
@@ -323,7 +301,7 @@ function onTimer(){
 function Friendly(x, y, game) {
     var friendly = game.add.sprite(x, y, 'friendly');
     var health = 2;
-    selected = selected;
+    var selected = false;
     friendly.speed = 100
     friendly.xDest = x;
     friendly.yDest = y;
@@ -360,34 +338,7 @@ function Friendly(x, y, game) {
         game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer');
         selected = true;
     }
-    
-    friendly.isDeselected = function() {
-        this.clearTint();
-        game.input.setDefaultCursor( 'url(Assets/Pictures/New-Piskel.cur), pointer');
-        selected = false; 
-        friendly.stop();
-        console.log(friendly.stop);
-     
-    }
-    
-    friendly.isReselected = function (){
-    if (selected == false){
-        this.setTint(0xff0000);
-        game.input.setDefaultCursor( 'url(Assets/Pictures/basicBoots.cur), pointer' ); 
-        selected = true;
-        move(self); 
-    }
-        
-    }
-    
-    
-    friendly.stop = function() {
-        var self = this; 
-        self.xDest = self.x;
-        self.yDest = self.y; 
-        self.speed = 0; 
-        
-    }
+
     
     return friendly;
 }
@@ -450,7 +401,7 @@ function Enemy(x, y, game) {
         }
         //villageSelected = villageArray[Math.floor(Math.random()*villageArray.length)];
         villageSelected = villageArray[0];
-        console.log("Village "+villageSelected+" has been selected");
+        //console.log("Village "+villageSelected+" has been selected");
         return villageSelected;
     }
     enemy.closestVillage();
@@ -459,7 +410,7 @@ function Enemy(x, y, game) {
 
 
 function Village(x, y, game) {
-   var village = game.add.sprite(x, y, 'villageNeutral');
+    var village = game.add.sprite(x, y, 'villageNeutral');
     var health = 3;
     
     village.xDest = x;
